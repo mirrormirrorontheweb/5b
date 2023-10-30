@@ -1,4 +1,4 @@
-const version = 'v0.2.2*'; // putting this up here so I can edit the text on the title screen more easily.
+const version = 'v0.3.0*'; // putting this up here so I can edit the text on the title screen more easily.
 
 /* For testing the performance of any block of code. It averages every 100 runs and prints to the console. To use, simply place the following around the code block you'd like to test:
 performanceTest(()=>{
@@ -2873,7 +2873,7 @@ function drawLevelButtons() {
 	ctx.textAlign = 'left';
 	ctx.textBaseline = 'top';
 	ctx.font = 'bold 32px Helvetica';
-	ctx.fillText(currentLevelDisplayName, 12.85, 489.45);
+	ctx.fillText(currentLevelDisplayName, 12.85, 495.45);
 	drawMenu2_3Button(0, 837.5, 486.95, playMode == 3 ? exitExploreLevel : playMode == 2 ? exitTestLevel : menu3Menu);
 }
 
@@ -3101,7 +3101,7 @@ function resetLevel() {
 		levelWidth = levels[currentLevel][0].length;
 		levelHeight = levels[currentLevel].length;
 
-		if (currentLevel === 0 && !playingLevelpack) levels[0][13][29] = levels[0][13][30] = levels[0][13][31] = quirksMode ? 16 : 1; // Adds converyors back to level 1 one quirks mode.
+		if (currentLevel === 0 && !playingLevelpack) levels[0][13][29] = levels[0][13][30] = levels[0][13][31] = quirksMode ? 16 : 1; // Adds converyors back to level 1 on quirks mode.
 
 		copyLevel(levels[currentLevel]);
 		charCount2 = 0;
@@ -9364,13 +9364,7 @@ function draw() {
 			}
 
 
-			if (exploreTab == 1) {
-				ctx.textBaseline = 'top';
-				ctx.textAlign = 'left';
-				ctx.fillStyle = '#ffffff';
-				ctx.font = '20px Helvetica';
-				ctx.fillText('Note: levelpacks are currently broken in 5beam and many only have one level.', 10, 90);
-			} else if (exploreTab == 2) {
+			if (exploreTab == 2) {
 				textBoxes[0][0].draw();
 				exploreSearchInput = textBoxes[0][0].text;
 
@@ -9455,7 +9449,7 @@ function draw() {
 				ctx.fillText('by ' + exploreLevelPageLevel.creator.username, 31.85, 66.1);
 
 				ctx.font = 'italic 18px Helvetica';
-				ctx.fillText('created on ' + exploreLevelPageLevel.created.slice(0,10), 31.85, 325);
+				ctx.fillText('created ' + exploreLevelPageLevel.created.slice(0,10), 31.85, 325);
 
 
 				ctx.fillStyle = '#ffffff';
