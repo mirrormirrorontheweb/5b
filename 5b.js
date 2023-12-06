@@ -50,7 +50,7 @@ let _frameCount = 0;
 let qTimer = 0;
 let inputText = '';
 let textAfterCursorAtClick = '';
-let controlOrCommandPress = false;
+// let controlOrCommandPress = false;
 
 let levelsString = '';
 let levelCount = 53;
@@ -158,6 +158,25 @@ function getSavedGame() {
 	}
 }
 getSavedGame();
+getSavedSettings();
+
+function saveSettings() {
+	bfdia5b.setItem('settings', JSON.stringify([screenShake, screenFlashes, quirksMode, enableExperimentalFeatures, frameRateThrottling, slowTintsEnabled]));
+}
+
+function getSavedSettings() {
+	if (bfdia5b.getItem('settings') == undefined) {
+		saveSettings();
+	} else {
+		let settingsArray = JSON.parse(bfdia5b.getItem('settings'));
+		screenShake = settingsArray[0];
+		screenFlashes = settingsArray[1];
+		quirksMode = settingsArray[2];
+		enableExperimentalFeatures = settingsArray[3];
+		frameRateThrottling = settingsArray[4];
+		slowTintsEnabled = settingsArray[5];
+	}
+}
 
 function saveMyLevels() {
 	bfdia5b.setItem('myLevels', JSON.stringify(lcSavedLevels));
@@ -2518,6 +2537,7 @@ function menuOptions() {
 
 function menuExitOptions() {
 	menuScreen = 0;
+	saveSettings();
 }
 
 function enterBaseLevelpackLevelSelect() {
@@ -7272,7 +7292,7 @@ function keydown(event) {
 	_keysDown[event.keyCode || event.charCode] = true;
 
 	if (editingTextBox && event.key) {
-		if (currentTextBoxAllowsLineBreaks && controlOrCommandPress && event.key == 'v') {
+		if (currentTextBoxAllowsLineBreaks && event.key == 'v' && (event.metaKey || event.ctrlKey)) {
 			if (browserPasteSolution) navigator.clipboard.readText().then(clipText => {inputText += clipText;}).catch(err => console.log(err));
 		} else if (event.key.length == 1) {
 			inputText += event.key;
@@ -7283,7 +7303,7 @@ function keydown(event) {
 		}
 	}
 
-	if (event.metaKey || event.ctrlKey) controlOrCommandPress = true;
+	// if (event.metaKey || event.ctrlKey) controlOrCommandPress = true;
 	if (menuScreen == 5 && !lcPopUp && !editingTextBox) {
 		// tool shortcuts
 		if (_xmouse < 660 && selectedTab == 2) {
@@ -7297,7 +7317,7 @@ function keydown(event) {
 			else if (event.key == '8' || event.key == 'j') setTool(7);
 		}
 		// undo shortcut
-		if (event.key == 'z' && controlOrCommandPress) {
+		if (event.key == 'z' && (event.metaKey || event.ctrlKey)) {
 			undo();
 		}
 	}
@@ -7305,7 +7325,7 @@ function keydown(event) {
 
 function keyup(event) {
 	_keysDown[event.keyCode || event.charCode] = false;
-	if (event.metaKey || event.ctrlKey) controlOrCommandPress = false;
+	// if (event.metaKey || event.ctrlKey) controlOrCommandPress = false;
 }
 
 // https://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser
@@ -7467,7 +7487,7 @@ function draw() {
 						currentLevel++;
 						if (!quirksMode) toSeeCS = true; // This line was absent in the original source, but without it dialogue doesn't play after level 1 when on a normal playthrough.
 						levelProgress = currentLevel;
-						if (currentLevel < levelCount-1) resetLevel();
+						if (currentLevel < levelCount) resetLevel();
 						else exitLevel();
 					} else {
 						if (playMode == 3) {
@@ -9010,7 +9030,7 @@ function draw() {
 					ctx.font = '23px Helvetica';
 					if (drawSimpleButton('Copy String', copyLevelString, 675, tabWindowY + 10, 130, 30, 3, '#ffffff', '#404040', '#666666', '#555555').hover) copyButton = true;
 					drawSimpleButton('Load String', openLevelLoader, 815, tabWindowY + 10, 130, 30, 3, '#ffffff', '#404040', '#666666', '#555555');
-					drawSimpleButton('Play Level', testLevelCreator, 675, tabWindowY + 50, 130, 30, 3, '#ffffff', '#404040', '#666666', '#555555');
+					drawSimpleButton('Test Level', testLevelCreator, 675, tabWindowY + 50, 130, 30, 3, '#ffffff', '#404040', '#666666', '#555555');
 					// if (enableExperimentalFeatures) {
 					let isNew = lcCurrentSavedLevel==-1;
 					if (!isNew) ctx.font = '18px Helvetica';
